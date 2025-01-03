@@ -26,7 +26,7 @@ const NavBar = ({ onAddCard, userRole, setUserRole }) => {
           <span className="ml-12 pt-2 text-2xl text-white">RIFAS BOCADILLO</span>
         </a>
 
-        {/* Botón Agregar Card (solo visible cuando el rol es admin) */}
+        
         {userRole === 'admin' && (
           <button
             onClick={onAddCard}
@@ -36,7 +36,7 @@ const NavBar = ({ onAddCard, userRole, setUserRole }) => {
           </button>
         )}
 
-        {/* Botón Administrar, movido al extremo derecho */}
+        
         {isHomePage && !isLoginPage && (
           <button
             onClick={handleAdminClick} 

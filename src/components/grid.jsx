@@ -1,5 +1,5 @@
 const Grid = () => {
-  // Generar una lista de números del 0 al 99
+  // Genera una lista de números del 0 al 99
   const numbers = Array.from({ length: 100 }, (_, index) => index);
 
   return (

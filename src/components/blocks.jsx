@@ -24,9 +24,9 @@ const Blocks = () => {
     <div className="bg-secondary">
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
-          {/* Contenedor de los botones alineado a la derecha */}
+          
           <div className="flex justify-end space-x-4">
-            {/* Botón Cambiar a Guest/Admin */}
+           
             <button
               className="mb-5 text-white bg-gray-500 border-0 py-2 px-5 focus:outline-none hover:bg-gray-600 rounded"
               onClick={toggleRole}

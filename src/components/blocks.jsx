@@ -16,6 +16,10 @@ const Blocks = () => {
     setCards([...cards, newCard]);
   };
 
+  const deleteCard = (id) => {
+    setCards(cards.filter(card => card.id !== id)); // Elimina la tarjeta por su id
+  };
+
   const toggleRole = () => {
     setUserRole((prevRole) => (prevRole === "guest" ? "admin" : "guest"));
   };
@@ -34,7 +38,7 @@ const Blocks = () => {
               Cambiar a {userRole === "guest" ? "Admin" : "Guest"}
             </button>
 
-            {/* Botón Agregar Card solo visible si el rol es admin */}
+            
             {userRole === "admin" && (
               <button
                 className="mb-5 text-white bg-green-500 border-0 py-2 px-5 focus:outline-none hover:bg-green-600 rounded"
@@ -45,7 +49,7 @@ const Blocks = () => {
             )}
           </div>
 
-          {/* Cards display */}
+          
           <div className="flex flex-wrap gap-6 text-center justify-center">
             {cards.map((card) => (
               <div
@@ -64,6 +68,16 @@ const Blocks = () => {
                     COMPRAR
                   </button>
                 </a>
+
+                
+                {userRole === "admin" && (
+                  <button
+                    className="mt-3 text-white bg-red-500 border-0 py-2 px-5 focus:outline-none hover:bg-red-600 rounded"
+                    onClick={() => deleteCard(card.id)}
+                  >
+                    Eliminar
+                  </button>
+                )}
               </div>
             ))}
           </div>

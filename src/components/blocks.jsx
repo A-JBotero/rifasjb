@@ -52,7 +52,7 @@ const Blocks = () => {
               Cambiar a {userRole === "guest" ? "Admin" : "Guest"}
             </button>
 
-            {/* Botón Agregar Card solo visible si el rol es admin */}
+            
             {userRole === "admin" && (
               <button
                 className="mb-5 text-white bg-green-500 border-0 py-2 px-5 focus:outline-none hover:bg-green-600 rounded"
@@ -63,7 +63,7 @@ const Blocks = () => {
             )}
           </div>
 
-          {/* Cards display */}
+          
           <div className="flex flex-wrap gap-6 text-center justify-center">
             {cards.map((card) => (
               <div
@@ -78,7 +78,7 @@ const Blocks = () => {
                 <p className="leading-relaxed text-white">{card.value}</p>
                 <p className="leading-relaxed text-white">{card.lottery}</p>
                 
-                {/* Botón Comprar oculto si el rol es admin */}
+                
                 {userRole !== "admin" && (
                   <a href="/sale">
                     <button className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded">
@@ -87,7 +87,7 @@ const Blocks = () => {
                   </a>
                 )}
 
-                {/* Botón Eliminar solo visible si el rol es admin */}
+                
                 {userRole === "admin" && (
                   <div className="mt-3 space-x-4">
                     <button

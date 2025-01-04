@@ -8,9 +8,9 @@ const Blocks = () => {
   const addCard = () => {
     const newCard = {
       id: Date.now(),
-      name: "Nombre PROD",
+      name: "Nombre PROD", 
       date: "Fecha",
-      value: "Valor",
+      value: "5000", 
       lottery: "Loteria",
     };
     setCards([...cards, newCard]);
@@ -23,11 +23,11 @@ const Blocks = () => {
   const editCard = (id) => {
     const updatedCards = cards.map((card) => {
       if (card.id === id) {
-        const newName = prompt("Nuevo nombre", card.name) || card.name;
-        const newDate = prompt("Nueva fecha", card.date) || card.date;
+        const newName = prompt("Nuevo nombre", card.name) || card.name; // Nueva lógica para editar el nombre
         const newValue = prompt("Nuevo valor", card.value) || card.value;
-        const newLottery = prompt("Nueva loteria", card.lottery) || card.lottery;
-        return { ...card, name: newName, date: newDate, value: newValue, lottery: newLottery };
+        const newDate = prompt("Nueva fecha", card.date) || card.date;
+        const newLottery = prompt("Nueva lotería", card.lottery) || card.lottery;
+        return { ...card, name: newName, value: newValue, date: newDate, lottery: newLottery };
       }
       return card;
     });
@@ -42,9 +42,7 @@ const Blocks = () => {
     <div className="bg-secondary">
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
-          
           <div className="flex justify-end space-x-4">
-           
             <button
               className="mb-5 text-white bg-gray-500 border-0 py-2 px-5 focus:outline-none hover:bg-gray-600 rounded"
               onClick={toggleRole}
@@ -52,7 +50,6 @@ const Blocks = () => {
               Cambiar a {userRole === "guest" ? "Admin" : "Guest"}
             </button>
 
-            
             {userRole === "admin" && (
               <button
                 className="mb-5 text-white bg-green-500 border-0 py-2 px-5 focus:outline-none hover:bg-green-600 rounded"
@@ -63,7 +60,6 @@ const Blocks = () => {
             )}
           </div>
 
-          
           <div className="flex flex-wrap gap-6 text-center justify-center">
             {cards.map((card) => (
               <div
@@ -73,12 +69,11 @@ const Blocks = () => {
                 <div className="rounded-lg h-56 overflow-hidden">
                   <img alt="content" className="object-cover object-center h-full w-full" src={kwtImage} />
                 </div>
-                <h2 className="title-font text-2xl font-medium text-white mt-5 mb-3">{card.name}</h2>
-                <p className="leading-relaxed text-white">{card.date}</p>
-                <p className="leading-relaxed text-white">{card.value}</p>
-                <p className="leading-relaxed text-white">{card.lottery}</p>
-                
-                
+                <h2 className="title-font text-2xl font-medium text-white mt-5 mb-3">{card.name}</h2> 
+                <p className="leading-relaxed text-white">Fecha: {card.date}</p>
+                <p className="leading-relaxed text-white">Valor: {card.value}</p>
+                <p className="leading-relaxed text-white">Lotería: {card.lottery}</p> 
+
                 {userRole !== "admin" && (
                   <a href="/sale">
                     <button className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded">
@@ -87,7 +82,6 @@ const Blocks = () => {
                   </a>
                 )}
 
-                
                 {userRole === "admin" && (
                   <div className="mt-3 space-x-4">
                     <button

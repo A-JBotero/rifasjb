@@ -3,13 +3,26 @@ import kwtImage from '../assets/kwt800.png';
 
 const Blocks = () => {
   const [cards, setCards] = useState([]);
-  const [userRole, setUserRole] = useState("guest"); // Estado inicial como "guest"
+  const [userRole, setUserRole] = useState("guest");
+
+  const formatDate = (date) => {
+    try {
+      const parsedDate = new Date(date);
+      return new Intl.DateTimeFormat('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(parsedDate);
+    } catch {
+      return date;
+    }
+  };
 
   const addCard = () => {
     const newCard = {
       id: Date.now(),
       name: "Nombre PROD", 
-      date: "Fecha",
+      date: formatDate(new Date()), // Fecha actual formateada
       value: "5000", 
       lottery: "Loteria",
     };
@@ -17,16 +30,18 @@ const Blocks = () => {
   };
 
   const deleteCard = (id) => {
-    setCards(cards.filter(card => card.id !== id)); // Elimina la tarjeta por su id
+    setCards(cards.filter(card => card.id !== id));
   };
 
   const editCard = (id) => {
     const updatedCards = cards.map((card) => {
       if (card.id === id) {
-        const newName = prompt("Nuevo nombre", card.name) || card.name; // Nueva lógica para editar el nombre
+        const newName = prompt("Nuevo nombre", card.name) || card.name;
         const newValue = prompt("Nuevo valor", card.value) || card.value;
-        const newDate = prompt("Nueva fecha", card.date) || card.date;
+        const newDateInput = prompt("Nueva fecha (dd/mm/yyyy)", card.date);
+        const newDate = newDateInput ? formatDate(newDateInput) : card.date;
         const newLottery = prompt("Nueva lotería", card.lottery) || card.lottery;
+
         return { ...card, name: newName, value: newValue, date: newDate, lottery: newLottery };
       }
       return card;

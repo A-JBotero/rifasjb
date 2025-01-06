@@ -23,7 +23,7 @@ const Blocks = () => {
       id: Date.now(),
       name: "Nombre PROD", 
       date: formatDate(new Date()), // Fecha actual formateada
-      value: "5000", 
+      value: "$5000", 
       lottery: "Loteria",
     };
     setCards([...cards, newCard]);
@@ -37,9 +37,35 @@ const Blocks = () => {
     const updatedCards = cards.map((card) => {
       if (card.id === id) {
         const newName = prompt("Nuevo nombre", card.name) || card.name;
-        const newValue = prompt("Nuevo valor", card.value) || card.value;
-        const newDateInput = prompt("Nueva fecha (dd/mm/yyyy)", card.date);
-        const newDate = newDateInput ? formatDate(newDateInput) : card.date;
+
+        // Validación de valor
+        let newValueInput = card.value;
+        const valueRegex = /^\$?\d+(\.\d{1,2})?$/;
+
+        do {
+          newValueInput = prompt("Nuevo valor (solo números, opcional $ al inicio)", newValueInput);
+          if (!newValueInput || valueRegex.test(newValueInput)) break;
+          alert("Por favor, ingrese un valor válido, solo números y opcionalmente el símbolo $ al inicio.");
+        } while (true);
+
+        const newValue = newValueInput || card.value;
+
+        // Validación de fecha
+        let newDateInput = card.date;
+        const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Eliminar la parte de tiempo
+
+        do {
+          newDateInput = prompt("Nueva fecha (dd/mm/yyyy)", newDateInput);
+          const [day, month, year] = newDateInput ? newDateInput.split("/").map(Number) : [];
+          const inputDate = new Date(year, month - 1, day);
+
+          if (!newDateInput || (dateRegex.test(newDateInput) && inputDate >= today)) break;
+          alert("Por favor, ingrese una fecha válida en formato dd/mm/yyyy que no sea menor a la fecha actual.");
+        } while (true);
+
+        const newDate = newDateInput || card.date;
         const newLottery = prompt("Nueva lotería", card.lottery) || card.lottery;
 
         return { ...card, name: newName, value: newValue, date: newDate, lottery: newLottery };

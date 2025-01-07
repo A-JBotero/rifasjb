@@ -21,16 +21,16 @@ const Blocks = () => {
   const addCard = () => {
     const newCard = {
       id: Date.now(),
-      name: "Nombre PROD", 
+      name: "Nombre PROD",
       date: formatDate(new Date()), // Fecha actual formateada
-      value: "$5000", 
+      value: "$5000",
       lottery: "Loteria",
     };
     setCards([...cards, newCard]);
   };
 
   const deleteCard = (id) => {
-    setCards(cards.filter(card => card.id !== id));
+    setCards(cards.filter((card) => card.id !== id));
   };
 
   const editCard = (id) => {
@@ -40,12 +40,12 @@ const Blocks = () => {
 
         // Validación de valor
         let newValueInput = card.value;
-        const valueRegex = /^\$?\d+(\.\d{1,2})?$/;
+        const valueRegex = /^\$?\d{1,6}(\.\d{1,2})?$/; // Permitir hasta 6 dígitos con un opcional decimal
 
         do {
-          newValueInput = prompt("Nuevo valor (solo números, opcional $ al inicio)", newValueInput);
+          newValueInput = prompt("Nuevo valor (máximo 6 dígitos, opcional $ al inicio)", newValueInput);
           if (!newValueInput || valueRegex.test(newValueInput)) break;
-          alert("Por favor, ingrese un valor válido, solo números y opcionalmente el símbolo $ al inicio.");
+          alert("Por favor, ingrese un valor válido con máximo 6 dígitos (ej: $123456).");
         } while (true);
 
         const newValue = newValueInput || card.value;
@@ -110,10 +110,10 @@ const Blocks = () => {
                 <div className="rounded-lg h-56 overflow-hidden">
                   <img alt="content" className="object-cover object-center h-full w-full" src={kwtImage} />
                 </div>
-                <h2 className="title-font text-2xl font-medium text-white mt-5 mb-3">{card.name}</h2> 
+                <h2 className="title-font text-2xl font-medium text-white mt-5 mb-3">{card.name}</h2>
                 <p className="leading-relaxed text-white">Fecha: {card.date}</p>
                 <p className="leading-relaxed text-white">Valor: {card.value}</p>
-                <p className="leading-relaxed text-white">Lotería: {card.lottery}</p> 
+                <p className="leading-relaxed text-white">Lotería: {card.lottery}</p>
 
                 {userRole !== "admin" && (
                   <a href="/sale">

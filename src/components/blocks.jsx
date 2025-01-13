@@ -5,11 +5,12 @@ const Blocks = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState("guest");
-  const [imagesBase64, setImagesBase64] = useState(null);
+  const [imagesMap, setImagesMap] = useState({});
 
-  // Fetch inicial de datos
-  useEffect(() => {
-    fetch("https://f1lt5trd-7123.use2.devtunnels.ms/Raffle")
+  // Función para obtener datos desde la API
+  const fetchData = () => {
+    setLoading(true);
+    fetch("https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -18,34 +19,53 @@ const Blocks = () => {
       })
       .then((data) => {
         setData(data);
-        const imagesData = data.map((item) => item.file);
-        setImagesBase64(imagesData);
+
+        // Crear un mapa de imágenes basadas en el ID de la card
+        const newImagesMap = {};
+        data.forEach((item) => {
+          newImagesMap[item.id] = item.file; // Asociar la imagen al ID de la card
+        });
+        setImagesMap((prevImagesMap) => ({
+          ...prevImagesMap,
+          ...newImagesMap, // Mantener las imágenes existentes y agregar nuevas si las hay
+        }));
+
         setLoading(false);
-        ;
       })
       .catch((error) => {
         setError(error.message);
         setLoading(false);
       });
+  };
+
+  // Fetch inicial
+  useEffect(() => {
+    fetchData();
   }, []);
 
   // Función para eliminar un elemento
   const deleteItem = async (id) => {
     try {
-      const response = await fetch(`https://f1lt5trd-7123.use2.devtunnels.ms/Raffle/?id=${id}`, {
+      const response = await fetch(`https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      
+
       if (!response.ok) {
         throw new Error("Error al eliminar el elemento.");
       }
-      // Actualiza el estado para reflejar los cambios en la UI
-      setData((prevData) => prevData.filter((item) => item.id !== id));
+
       alert("Elemento eliminado exitosamente.");
-      
+
+      // Eliminar la card y su imagen asociada
+      setData((prevData) => prevData.filter((item) => item.id !== id));
+      setImagesMap((prevImagesMap) => {
+        const updatedImagesMap = { ...prevImagesMap };
+        delete updatedImagesMap[id]; // Eliminar la imagen correspondiente
+        return updatedImagesMap;
+      });
     } catch (error) {
       console.error("Error al realizar la petición DELETE:", error);
       alert("No se pudo eliminar el elemento.");
@@ -71,36 +91,31 @@ const Blocks = () => {
               Cambiar a {userRole === "guest" ? "Admin" : "Guest"}
             </button>
           </div>
-          
 
           <div className="flex flex-wrap gap-6 text-center justify-center">
-            
             {Array.isArray(data) &&
-              data.map((item, index) => (
-                
+              data.map((item) => (
                 <div
                   key={item.id}
                   className="sm:w-2/5 bg-gray-800 border-2 border-gray-700 rounded-lg pt-4 pb-3 px-5 transform transition duration-300 hover:scale-105 hover:border-indigo-500 hover:shadow-lg"
-                > 
-          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
-  {imagesBase64.length > 0 ? (
-    <div
-      key={1}
-      className="flex justify-center items-center w-full h-full bg-gray-200" // Fondo para asegurar que la imagen ocupe espacio
-    >
-      <img
-        src={`data:image/jpeg;base64,${imagesBase64[index]}`}
-        alt={`Imagen ${index + 1}`}
-        className="object-cover w-full h-full rounded-lg" // Asegura que la imagen ocupe todo el espacio disponible
-      />
-    </div>
-  ) : (
-    <p>No hay imágenes disponibles</p>
-  )}
-</div>
-                 
-                  <h2 className="title-font text-2xl font-medium text-white mt-5 mb-3">
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
+                    {imagesMap[item.id] ? (
+                      <div
+                        className="flex justify-center items-center w-full h-full bg-gray-200"
+                      >
+                        <img
+                          src={`data:image/jpeg;base64,${imagesMap[item.id]}`}
+                          alt={`Imagen ${item.name}`}
+                          className="object-cover w-full h-full rounded-lg"
+                        />
+                      </div>
+                    ) : (
+                      <p>No hay imágenes disponibles</p>
+                    )}
+                  </div>
 
+                  <h2 className="title-font text-2xl font-medium text-white mt-5 mb-3">
                     {item.name}
                   </h2>
 

@@ -20,14 +20,14 @@ const Blocks = () => {
       .then((data) => {
         setData(data);
 
-        // Crear un mapa de imágenes basadas en el ID de la card
+        /
         const newImagesMap = {};
         data.forEach((item) => {
-          newImagesMap[item.id] = item.file; // Asociar la imagen al ID de la card
+          newImagesMap[item.id] = item.file; 
         });
         setImagesMap((prevImagesMap) => ({
           ...prevImagesMap,
-          ...newImagesMap, // Mantener las imágenes existentes y agregar nuevas si las hay
+          ...newImagesMap, 
         }));
 
         setLoading(false);
@@ -59,11 +59,11 @@ const Blocks = () => {
 
       alert("Elemento eliminado exitosamente.");
 
-      // Eliminar la card y su imagen asociada
+    
       setData((prevData) => prevData.filter((item) => item.id !== id));
       setImagesMap((prevImagesMap) => {
         const updatedImagesMap = { ...prevImagesMap };
-        delete updatedImagesMap[id]; // Eliminar la imagen correspondiente
+        delete updatedImagesMap[id]; 
         return updatedImagesMap;
       });
     } catch (error) {

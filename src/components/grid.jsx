@@ -1,6 +1,6 @@
 const Grid = () => {
-  // Genera una lista de números del 0 al 99
-  const numbers = Array.from({ length: 100 }, (_, index) => index);
+  // Generates the grid that contains the list of numbers from 00 to 99
+  const numbers = Array.from({ length: 100 }, (_, index) => index.toString().padStart(2, '0'));
 
   return (
     <div className="flex justify-center items-center bg-secondary">

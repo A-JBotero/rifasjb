@@ -5,6 +5,7 @@ import Footer from '../components/footer';
 
 const Sale = () => {
   return (
+    //renders the navigation bar, cards and footer
     <>
       <NavBar />
       <Items />

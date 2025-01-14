@@ -7,7 +7,7 @@ const Blocks = () => {
   const [userRole, setUserRole] = useState("guest");
   const [imagesMap, setImagesMap] = useState({});
 
-  // Función para obtener datos desde la API
+  // Function to get data from the API
   const fetchData = () => {
     setLoading(true);
     fetch("https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle")
@@ -19,7 +19,7 @@ const Blocks = () => {
       })
       .then((data) => {
         setData(data);
-        
+
         const newImagesMap = {};
         data.forEach((item) => {
           newImagesMap[item.id] = item.file; 
@@ -37,12 +37,12 @@ const Blocks = () => {
       });
   };
 
-  // Fetch inicial
+  // Initial Fetch 
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Función para eliminar un elemento
+  // Function to delete an element
   const deleteItem = async (id) => {
     try {
       const response = await fetch(`https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`, {
@@ -71,6 +71,8 @@ const Blocks = () => {
     }
   };
 
+
+  //second fetch after deleting an item
   const toggleRole = () => {
     setUserRole((prevRole) => (prevRole === "guest" ? "admin" : "guest"));
   };

@@ -7,6 +7,7 @@ import App from './App.jsx'
 
 
 createRoot(document.getElementById('root')).render(
+  //Render on strict mode app an the navegation whit react router dom
   <StrictMode>
     <BrowserRouter>
     <App/>

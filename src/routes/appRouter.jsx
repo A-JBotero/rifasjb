@@ -6,7 +6,9 @@ import Sale from "../pages/sale.jsx"
 
 const AppRouter = () => {
   return (
+    //renders home as the main path and adds the different routes to the application
     <Routes>
+      
         <Route path='/login' element={<Login/>} />
         <Route path='/home' element={<Home/>}/>
         <Route path='/*' element={ <Navigate to="/home" />} />

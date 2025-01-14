@@ -129,19 +129,19 @@ const Blocks = () => {
                   <p className="leading-relaxed text-white">Lotería: {item.lottery}</p>
 
                   {userRole !== "admin" && (
-  <button
-    className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
-    onClick={() => handleBuy(item)} // Navegar con los datos del producto seleccionado
-  >
-    COMPRAR
-  </button>
-)}
+                 <button
+                    className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
+                    onClick={() => handleBuy(item)}
+                  >
+                    COMPRAR
+                  </button>
+                )}
                   {userRole === "admin" && (
                     <div className="mt-3 space-x-4">
                       <button
                         className="text-white bg-red-500 border-0 py-2 px-5 focus:outline-none hover:bg-red-600 rounded"
                         onClick={() => deleteItem(item.id)}
-                      >
+                     >
                         Eliminar
                       </button>
                     </div>

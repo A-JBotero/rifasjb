@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Blocks = () => {
   const [data, setData] = useState(null);
@@ -6,6 +7,7 @@ const Blocks = () => {
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState("guest");
   const [imagesMap, setImagesMap] = useState({});
+  const navigate = useNavigate();
 
   // Function to get data from the API
   const fetchData = () => {
@@ -22,11 +24,11 @@ const Blocks = () => {
 
         const newImagesMap = {};
         data.forEach((item) => {
-          newImagesMap[item.id] = item.file; 
+          newImagesMap[item.id] = item.file;
         });
         setImagesMap((prevImagesMap) => ({
           ...prevImagesMap,
-          ...newImagesMap, 
+          ...newImagesMap,
         }));
 
         setLoading(false);
@@ -37,7 +39,7 @@ const Blocks = () => {
       });
   };
 
-  // Initial Fetch 
+  // Initial Fetch
   useEffect(() => {
     fetchData();
   }, []);
@@ -45,12 +47,15 @@ const Blocks = () => {
   // Function to delete an element
   const deleteItem = async (id) => {
     try {
-      const response = await fetch(`https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Error al eliminar el elemento.");
@@ -58,11 +63,10 @@ const Blocks = () => {
 
       alert("Elemento eliminado exitosamente.");
 
-    
       setData((prevData) => prevData.filter((item) => item.id !== id));
       setImagesMap((prevImagesMap) => {
         const updatedImagesMap = { ...prevImagesMap };
-        delete updatedImagesMap[id]; 
+        delete updatedImagesMap[id];
         return updatedImagesMap;
       });
     } catch (error) {
@@ -71,10 +75,12 @@ const Blocks = () => {
     }
   };
 
-
-  //second fetch after deleting an item
   const toggleRole = () => {
     setUserRole((prevRole) => (prevRole === "guest" ? "admin" : "guest"));
+  };
+
+  const handleBuy = (item) => {
+    navigate("/sale", { state: { item } });
   };
 
   if (loading) return <p>Cargando datos...</p>;
@@ -102,9 +108,7 @@ const Blocks = () => {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
                     {imagesMap[item.id] ? (
-                      <div
-                        className="flex justify-center items-center w-full h-full bg-gray-200"
-                      >
+                      <div className="flex justify-center items-center w-full h-full bg-gray-200">
                         <img
                           src={`data:image/jpeg;base64,${imagesMap[item.id]}`}
                           alt={`Imagen ${item.name}`}
@@ -125,13 +129,13 @@ const Blocks = () => {
                   <p className="leading-relaxed text-white">Lotería: {item.lottery}</p>
 
                   {userRole !== "admin" && (
-                    <a href="/sale">
-                      <button className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded">
-                        COMPRAR
-                      </button>
-                    </a>
-                  )}
-
+  <button
+    className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
+    onClick={() => handleBuy(item)} // Navegar con los datos del producto seleccionado
+  >
+    COMPRAR
+  </button>
+)}
                   {userRole === "admin" && (
                     <div className="mt-3 space-x-4">
                       <button

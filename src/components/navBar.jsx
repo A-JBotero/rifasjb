@@ -31,8 +31,8 @@ const NavBar = ({ onAddCard, userRole, setUserRole }) => {
         >
           <span className="ml-12 pt-2 text-2xl text-white font-serif italic">RIFAS BOCADILLO</span>
         </a>
-
-        {userRole === 'admin' && (
+      
+        {userRole === 'admin' && (      
           <button
             onClick={onAddCard}
             className="inline-flex items-center text-white bg-green-500 border-0 py-2 px-5 focus:outline-none hover:bg-green-600 rounded ml-4"

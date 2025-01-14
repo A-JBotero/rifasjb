@@ -20,7 +20,7 @@ const Blocks = () => {
       .then((data) => {
         setData(data);
 
-        /
+         
         const newImagesMap = {};
         data.forEach((item) => {
           newImagesMap[item.id] = item.file; 

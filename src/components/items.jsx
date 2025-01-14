@@ -3,11 +3,12 @@ import { useLocation } from 'react-router-dom';
 import Grid from './grid';
 
 const Items = () => {
-  // Obtener los datos del producto seleccionados desde el estado de navegación
+  
   const location = useLocation();
   const item = location.state?.item;
+  const imagesMap = location.state?.imagesMap; 
 
-  if (!item) {
+  if (!item || !imagesMap) {
     return (
       <div className="bg-secondary h-screen flex justify-center items-center">
         <h1 className="text-white text-2xl">No se encontró información del producto seleccionado.</h1>
@@ -15,15 +16,25 @@ const Items = () => {
     );
   }
 
+  
+  const itemImage = imagesMap[item.id];
+
   return (
     <div className="bg-secondary flex flex-wrap lg:flex-nowrap">
-      {/* Sección de la imagen y los detalles */}
+     
       <div className="lg:w-1/2 w-full p-5 flex flex-col items-center">
-        <img
-          alt={item.name || 'Producto'}
-          className="w-3/4 lg:w-2/3 lg:h-auto h-48 object-cover object-center rounded"
-          src={item.imageUrl || 'https://via.placeholder.com/150'} // Mostrar la imagen en base64 o un placeholder
-        />
+       
+        {itemImage ? (
+          <img
+            alt={item.name || 'Producto'}
+            className="w-3/4 lg:w-2/3 lg:h-auto h-48 object-cover object-center rounded"
+            src={`data:image/jpeg;base64,${itemImage}`} 
+          />
+        ) : (
+          <div className="w-3/4 lg:w-2/3 lg:h-auto h-48 bg-gray-300 flex justify-center items-center rounded">
+            <span className="text-white">Imagen no disponible</span>
+          </div>
+        )}
         <div className="mt-5 w-full">
           <h1 className="text-white text-2xl md:text-3xl title-font font-medium mb-2">
             {item.name}
@@ -51,7 +62,7 @@ const Items = () => {
         </div>
       </div>
 
-      {/* Sección de la cuadrícula */}
+
       <div className="lg:w-1/2 w-full p-5">
         <Grid />
       </div>

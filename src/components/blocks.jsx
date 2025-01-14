@@ -7,9 +7,9 @@ const Blocks = () => {
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState("guest");
   const [imagesMap, setImagesMap] = useState({});
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
-  // Function to get data from the API
+  
   const fetchData = () => {
     setLoading(true);
     fetch("https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle")
@@ -24,7 +24,7 @@ const Blocks = () => {
 
         const newImagesMap = {};
         data.forEach((item) => {
-          newImagesMap[item.id] = item.file;
+          newImagesMap[item.id] = item.file; 
         });
         setImagesMap((prevImagesMap) => ({
           ...prevImagesMap,
@@ -39,23 +39,30 @@ const Blocks = () => {
       });
   };
 
-  // Initial Fetch
+ 
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Function to delete an element
+  
+  const handleBuy = (item) => {
+    navigate("/sale", {
+      state: {
+        item: item,
+        imagesMap: imagesMap, 
+      },
+    });
+  };
+
+  // Función para eliminar un item
   const deleteItem = async (id) => {
     try {
-      const response = await fetch(
-        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Error al eliminar el elemento.");
@@ -66,7 +73,7 @@ const Blocks = () => {
       setData((prevData) => prevData.filter((item) => item.id !== id));
       setImagesMap((prevImagesMap) => {
         const updatedImagesMap = { ...prevImagesMap };
-        delete updatedImagesMap[id];
+        delete updatedImagesMap[id]; 
         return updatedImagesMap;
       });
     } catch (error) {
@@ -77,10 +84,6 @@ const Blocks = () => {
 
   const toggleRole = () => {
     setUserRole((prevRole) => (prevRole === "guest" ? "admin" : "guest"));
-  };
-
-  const handleBuy = (item) => {
-    navigate("/sale", { state: { item } });
   };
 
   if (loading) return <p>Cargando datos...</p>;
@@ -129,19 +132,20 @@ const Blocks = () => {
                   <p className="leading-relaxed text-white">Lotería: {item.lottery}</p>
 
                   {userRole !== "admin" && (
-                 <button
-                    className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
-                    onClick={() => handleBuy(item)}
-                  >
-                    COMPRAR
-                  </button>
-                )}
+                    <button
+                      className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
+                      onClick={() => handleBuy(item)} 
+                    >
+                      COMPRAR
+                    </button>
+                  )}
+
                   {userRole === "admin" && (
                     <div className="mt-3 space-x-4">
                       <button
                         className="text-white bg-red-500 border-0 py-2 px-5 focus:outline-none hover:bg-red-600 rounded"
                         onClick={() => deleteItem(item.id)}
-                     >
+                      >
                         Eliminar
                       </button>
                     </div>

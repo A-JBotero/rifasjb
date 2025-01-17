@@ -35,7 +35,7 @@ const Items = () => {
             <span className="text-white">Imagen no disponible</span>
           </div>
         )}
-        <div className="mt-5 w-full">
+        <div className="mt-5 item-center w-full">
           <h1 className="text-white text-2xl md:text-3xl title-font font-medium mb-2">
             {item.name}
           </h1>

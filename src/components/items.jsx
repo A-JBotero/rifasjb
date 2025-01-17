@@ -46,7 +46,7 @@ const Items = () => {
             Fecha: {item.startDate || 'No disponible'}
           </p>
           <p className="leading-relaxed text-white text-sm md:text-base">
-            Precio: {item.value || 'No disponible'}
+            Precio: {item.ticketPrice || 'No disponible'}
           </p>
           <div className="flex items-center justify-between mt-6">
             <span className="title-font font-medium text-xl md:text-2xl text-white">

@@ -8,8 +8,8 @@ const Blocks = () => {
   const [userRole, setUserRole] = useState("guest");
   const [imagesMap, setImagesMap] = useState({});
   const [editItem, setEditItem] = useState(null);
+  const [newItem, setNewItem] = useState(false);
   const [formData, setFormData] = useState({
-    id: "",
     name: "",
     description: "",
     file: "",
@@ -17,14 +17,13 @@ const Blocks = () => {
     endDate: "",
     status: 1,
     ticketPrice: 0,
-    idLottery: 0,
-    value: 0, // Nuevo campo para el valor
+    idLottery: 1,
   });
   const navigate = useNavigate();
 
   const fetchData = () => {
     setLoading(true);
-    fetch("https://f1lt5trd-7123.use2.devtunnels.ms/Raffle")
+    fetch("https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -33,7 +32,6 @@ const Blocks = () => {
       })
       .then((data) => {
         setData(data);
-
         const newImagesMap = {};
         data.forEach((item) => {
           newImagesMap[item.id] = item.file;
@@ -42,7 +40,6 @@ const Blocks = () => {
           ...prevImagesMap,
           ...newImagesMap,
         }));
-
         setLoading(false);
       })
       .catch((error) => {
@@ -67,7 +64,7 @@ const Blocks = () => {
   const deleteItem = async (id) => {
     try {
       const response = await fetch(
-        `https://f1lt5trd-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
+        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
         {
           method: "DELETE",
           headers: {
@@ -114,7 +111,7 @@ const Blocks = () => {
   const handleUpdate = async () => {
     try {
       const response = await fetch(
-        `https://f1lt5trd-7123.use2.devtunnels.ms/Raffle`,
+        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle`,
         {
           method: "PUT",
           headers: {
@@ -141,6 +138,39 @@ const Blocks = () => {
     }
   };
 
+  const handleAddNew = async () => {
+    try {
+      const response = await fetch(
+        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al añadir el elemento.");
+      }
+
+      const newItem = await response.json();
+      alert("Elemento añadido exitosamente.");
+
+      setData((prevData) => [...prevData, newItem]);
+      setImagesMap((prevImagesMap) => ({
+        ...prevImagesMap,
+        [newItem.id]: newItem.file,
+      }));
+
+      setNewItem(false);
+    } catch (error) {
+      console.error("Error al realizar la petición POST:", error);
+      alert("No se pudo añadir el elemento.");
+    }
+  };
+
   if (loading) return <p>Cargando datos...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -157,9 +187,11 @@ const Blocks = () => {
             </button>
           </div>
 
-          {editItem && (
+          {(editItem || newItem) && (
             <div className="mb-6 bg-gray-800 p-5 rounded-lg">
-              <h2 className="text-white text-xl mb-4">Editar Elemento</h2>
+              <h2 className="text-white text-xl mb-4">
+                {editItem ? "Editar Elemento" : "Añadir Nuevo Elemento"}
+              </h2>
               <div className="space-y-4">
                 <input
                   type="text"
@@ -200,21 +232,32 @@ const Blocks = () => {
                 />
                 <input
                   type="number"
-                  name="value"
-                  value={formData.value}
+                  name="ticketPrice"
+                  value={formData.ticketPrice}
                   onChange={handleInputChange}
-                  placeholder="Valor"
+                  placeholder="Precio del boleto"
+                  className="w-full p-2 rounded"
+                />
+                <input
+                  type="number"
+                  name="idLottery"
+                  value={formData.idLottery}
+                  onChange={handleInputChange}
+                  placeholder="ID de la Lotería"
                   className="w-full p-2 rounded"
                 />
                 <button
                   className="text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
-                  onClick={handleUpdate}
+                  onClick={editItem ? handleUpdate : handleAddNew}
                 >
-                  Actualizar
+                  {editItem ? "Actualizar" : "Añadir"}
                 </button>
                 <button
                   className="text-white bg-gray-500 border-0 py-2 px-5 focus:outline-none hover:bg-gray-600 rounded"
-                  onClick={() => setEditItem(null)}
+                  onClick={() => {
+                    setEditItem(null);
+                    setNewItem(false);
+                  }}
                 >
                   Cancelar
                 </button>
@@ -222,11 +265,32 @@ const Blocks = () => {
             </div>
           )}
 
+          {!newItem && userRole === "admin" && !editItem && (
+            <button
+              className="text-white bg-green-500 border-0 py-2 px-5 focus:outline-none hover:bg-green-600 rounded mb-6"
+              onClick={() => {
+                setNewItem(true);
+                setFormData({
+                  name: "",
+                  description: "",
+                  file: "",
+                  startDate: "",
+                  endDate: "",
+                  status: 1,
+                  ticketPrice: 0,
+                  idLottery: 0,
+                });
+              }}
+            >
+              Añadir Nuevo Elemento
+            </button>
+          )}
+
           <div className="flex flex-wrap gap-6 text-center justify-center">
             {Array.isArray(data) &&
-              data.map((item) => (
+              data.map((item, index) => (
                 <div
-                  key={item.id}
+                  key={item.id || `item-${index}`}
                   className="sm:w-2/5 bg-gray-800 border-2 border-gray-700 rounded-lg pt-4 pb-3 px-5 transform transition duration-300 hover:scale-105 hover:border-indigo-500 hover:shadow-lg"
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
@@ -248,10 +312,26 @@ const Blocks = () => {
                   </h2>
 
                   <p className="leading-relaxed text-white">
-                    Fecha: {new Date(item.startDate).toLocaleDateString("en-CA")}
+                    Fecha:{" "}
+                    {item.startDate
+                      ? (() => {
+                          const parsedDate = new Date(item.startDate);
+                          return !isNaN(parsedDate)
+                            ? parsedDate.toLocaleDateString("es-ES", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })
+                            : "Fecha no válida";
+                        })()
+                      : "Fecha no disponible"}
                   </p>
-                  <p className="leading-relaxed text-white">Valor: {item.value}</p>
-                  <p className="leading-relaxed text-white">Lotería: {item.lottery}</p>
+                  <p className="leading-relaxed text-white">
+                    Valor: {item.ticketPrice}
+                  </p>
+                  <p className="leading-relaxed text-white">
+                    Lotería: {item.idLottery}
+                  </p>
 
                   {userRole !== "admin" && (
                     <button

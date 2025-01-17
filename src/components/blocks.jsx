@@ -178,13 +178,33 @@ const Blocks = () => {
     <div className="bg-secondary">
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end items-center space-x-4 mb-5">
             <button
-              className="mb-5 text-white bg-gray-500 border-0 py-2 px-5 focus:outline-none hover:bg-gray-600 rounded"
+              className="text-white bg-gray-500 border-0 py-2 px-5 focus:outline-none hover:bg-gray-600 rounded"
               onClick={toggleRole}
             >
               Cambiar a {userRole === "guest" ? "Admin" : "Guest"}
             </button>
+            {userRole === "admin" && (
+              <button
+                className="text-white bg-green-500 border-0 py-2 px-5 focus:outline-none hover:bg-green-600 rounded"
+                onClick={() => {
+                  setNewItem(true);
+                  setFormData({
+                    name: "",
+                    description: "",
+                    file: "",
+                    startDate: "",
+                    endDate: "",
+                    status: 1,
+                    ticketPrice: 0,
+                    idLottery: 0,
+                  });
+                }}
+              >
+                Crear una nueva rifa
+              </button>
+            )}
           </div>
 
           {(editItem || newItem) && (
@@ -265,27 +285,6 @@ const Blocks = () => {
             </div>
           )}
 
-          {!newItem && userRole === "admin" && !editItem && (
-            <button
-              className="text-white bg-green-500 border-0 py-2 px-5 focus:outline-none hover:bg-green-600 rounded mb-6"
-              onClick={() => {
-                setNewItem(true);
-                setFormData({
-                  name: "",
-                  description: "",
-                  file: "",
-                  startDate: "",
-                  endDate: "",
-                  status: 1,
-                  ticketPrice: 0,
-                  idLottery: 0,
-                });
-              }}
-            >
-              Añadir Nuevo Elemento
-            </button>
-          )}
-
           <div className="flex flex-wrap gap-6 text-center justify-center">
             {Array.isArray(data) &&
               data.map((item, index) => (
@@ -295,7 +294,7 @@ const Blocks = () => {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
                     {imagesMap[item.id] ? (
-                      <div className="flex justify-center items-center w-full h-full bg-gray-200">
+                      <div className="flex justify-center items-center w-full h-64 bg-gray-200">
                         <img
                           src={`data:image/jpeg;base64,${imagesMap[item.id]}`}
                           alt={`Imagen ${item.name}`}
@@ -313,9 +312,9 @@ const Blocks = () => {
 
                   <p className="leading-relaxed text-white">
                     Fecha:{" "}
-                    {item.startDate
+                    {item.endDate
                       ? (() => {
-                          const parsedDate = new Date(item.startDate);
+                          const parsedDate = new Date(item.endDate);
                           return !isNaN(parsedDate)
                             ? parsedDate.toLocaleDateString("es-ES", {
                                 year: "numeric",

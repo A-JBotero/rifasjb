@@ -6,7 +6,7 @@ import Footer from "../components/footer";
   return (
     //renders the navigation bar, cards and footer
     <>
-    <NavBar/>
+     <NavBar/>
      <Blocks/>
      <Footer/>
      </>

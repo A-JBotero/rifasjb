@@ -23,7 +23,7 @@ const NavBar = ({ onAddCard, userRole, setUserRole }) => {
   };
 
   return (
-    <header className="text-gray-600 body-font bg-primary">
+    <header className="text-gray-600 body-font bg-bgb">
       <div className="container mx-auto flex flex-wrap p-8 flex-col md:flex-row items-center">
         <a
           href="/home"
@@ -40,20 +40,20 @@ const NavBar = ({ onAddCard, userRole, setUserRole }) => {
             Agregar Card
           </button>
         )}
+{isHomePage && !isLoginPage && userRole !== 'admin' && (
+  <button
+    onClick={handleAdminClick}
+    className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] hover:shadow-lg hover:shadow-black rounded ml-auto transition-all"
+  >
+    ADMINISTRAR
+  </button>
+)}
 
-        {isHomePage && !isLoginPage && userRole !== 'admin' && (
-          <button
-            onClick={handleAdminClick}
-            className="inline-flex items-center text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded ml-auto"
-          >
-            ADMINISTRAR
-          </button>
-        )}
 
         {userRole === 'admin' && (
           <button
             onClick={handleLogout}
-            className="inline-flex items-center text-white bg-red-500 border-0 py-2 px-5 focus:outline-none hover:bg-red-600 rounded ml-auto"
+            className="inline-flex items-center text-white bg-red-500 border-0 py-2 px-5 focus:outline-none hover:bg-hovbtn  rounded ml-auto"
           >
             LogOut
           </button>

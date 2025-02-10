@@ -3,7 +3,7 @@ const Grid = () => {
   const numbers = Array.from({ length: 100 }, (_, index) => index.toString().padStart(2, '0'));
 
   return (
-    <div className="flex justify-center items-center bg-secondary">
+    <div className="flex justify-center items-center bg-darkgray">
       <div className="grid grid-cols-5 md:grid-cols-10 gap-2 border border-gray-300">
         {numbers.map((number) => (
           <button

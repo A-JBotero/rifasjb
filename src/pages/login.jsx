@@ -6,7 +6,7 @@ const Login = () => {
   return (
     <>
       <NavBar />
-      <section className="text-gray-400 bg-gray-900 body-font min-h-screen flex items-center justify-center">
+      <section className="text-gray-400 bg-bgb body-font min-h-screen flex items-center justify-center">
         <div className="container px-5 py-24 mx-auto flex flex-wrap items-center">
           <div className="lg:w-2/6 md:w-1/2 bg-gray-800 bg-opacity-50 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
             <h2 className="text-white text-lg font-medium title-font mb-5">Inicio de sesión</h2>

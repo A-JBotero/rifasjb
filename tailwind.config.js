@@ -16,6 +16,12 @@ export default {
         'blockButtonHover' :'#172056',
         'hoverCards' : 'rgba(30, 37, 52, 0.6)',
         'blanco' : '#ffffff',
+        'bgb' : '#121212',
+        'gold' : '#FFD700',
+        'darkgray' : '#2D2D2D',
+        'lightgray' : '#3A3A3A ',
+        'hovbtn' : '#E6C200',
+        
         
       }
     },

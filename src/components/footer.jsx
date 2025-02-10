@@ -2,11 +2,11 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <footer className="text-gray-400 bg-gray-900 body-font">
+    <footer className="text-gray-400 bg-bgb body-font">
     <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
       <a className="flex title-font font-medium items-center md:justify-start justify-center text-white">
         
-        <span className="ml-3 text-xl italic">DieselStyles</span>
+        <span className="ml-3 text-xl  italic">DieselStyles</span>
       </a>
       <p className="text-sm text-gray-400 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-800 sm:py-2 sm:mt-0 mt-4">© DieselStyles  —
         <a href="#" className="text-gray-500 ml-1" target="_blank" rel="noopener noreferrer"></a>
@@ -28,11 +28,16 @@ const Footer = () => {
             <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
           </svg>
         </a>
-        <a className="ml-3 text-gray-400" target="_blank" href='#'>
-          <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0" className="w-5 h-5" viewBox="0 0 24 24">
-            <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
-            <circle cx="4" cy="4" r="2" stroke="none"></circle>
-          </svg>
+        <a className="ml-3 text-gray-400" target="_blank" href='https://www.tiktok.com/@santy_2992'>
+        <span class="[&>svg]:h-5 [&>svg]:w-5">
+       <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 448 512">
+         <path
+            d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z" />
+                </svg>
+            </span>
         </a>
       </span>
     </div>

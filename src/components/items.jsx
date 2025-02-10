@@ -20,7 +20,7 @@ const Items = () => {
   const itemImage = imagesMap[item.id];
 
   return (
-    <div className="bg-secondary flex flex-wrap lg:flex-nowrap">
+    <div className="bg-darkgray flex flex-wrap lg:flex-nowrap">
      
       <div className="lg:w-1/2 w-full p-5 flex flex-col items-center">
        
@@ -55,7 +55,7 @@ const Items = () => {
             <span className="title-font font-medium text-xl md:text-2xl text-white">
               {item.value || '0.00'}$
             </span>
-            <button className="flex text-white bg-blue-500 border-0 py-2 px-4 md:px-5 focus:outline-none hover:bg-blue-600 rounded">
+            <button className="flex text-black bg-gold border-0 py-2 px-4 md:px-5 focus:outline-none hover:bg-blue-600 rounded">
               Pagar
             </button>
           </div>

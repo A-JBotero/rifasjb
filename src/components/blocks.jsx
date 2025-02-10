@@ -175,7 +175,7 @@ const Blocks = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="bg-secondary">
+    <div className="bg-darkgray">
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
           <div className="flex justify-end items-center space-x-4 mb-5">
@@ -194,10 +194,10 @@ const Blocks = () => {
                     name: "",
                     description: "",
                     file: "",
+                    ticketPrice: 0,
                     startDate: "",
                     endDate: "",
                     status: 1,
-                    ticketPrice: 0,
                     idLottery: 0,
                   });
                 }}
@@ -290,7 +290,7 @@ const Blocks = () => {
               data.map((item, index) => (
                 <div
                   key={item.id || `item-${index}`}
-                  className="sm:w-2/5 bg-gray-800 border-2 border-gray-700 rounded-lg pt-4 pb-3 px-5 transform transition duration-300 hover:scale-105 hover:border-indigo-500 hover:shadow-lg"
+                  className="sm:w-2/5 bg-lightgray border-2 border-gray-900 rounded-lg pt-4 pb-3 px-5 transform transition duration-300 hover:scale-105 hover:border-black hover:shadow-lg"
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
                     {imagesMap[item.id] ? (
@@ -306,9 +306,13 @@ const Blocks = () => {
                     )}
                   </div>
 
-                  <h2 className="title-font text-2xl font-medium text-white mt-5 mb-3">
+                  <h2 className="title-font text-2xl font-bold text-white mt-5 mb-3">
                     {item.name}
                   </h2>
+
+                  <p className="leading-relaxed text-white">
+                    Valor: {item.ticketPrice}
+                  </p>
 
                   <p className="leading-relaxed text-white">
                     Fecha:{" "}
@@ -325,16 +329,14 @@ const Blocks = () => {
                         })()
                       : "Fecha no disponible"}
                   </p>
-                  <p className="leading-relaxed text-white">
-                    Valor: {item.ticketPrice}
-                  </p>
+                 
                   <p className="leading-relaxed text-white">
                     Lotería: {item.idLottery}
                   </p>
 
                   {userRole !== "admin" && (
                     <button
-                      className="flex mx-auto mt-5 text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
+                       className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] hover:shadow-lg hover:shadow-black rounded ml-auto transition-all"
                       onClick={() => handleBuy(item)}
                     >
                       COMPRAR

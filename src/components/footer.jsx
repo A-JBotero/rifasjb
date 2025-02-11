@@ -29,7 +29,7 @@ const Footer = () => {
           </svg>
         </a>
         <a className="ml-3 text-gray-400" target="_blank" href='https://www.tiktok.com/@santy_2992'>
-        <span class="[&>svg]:h-5 [&>svg]:w-5">
+        <span className="[&>svg]:h-5 [&>svg]:w-5">
        <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"

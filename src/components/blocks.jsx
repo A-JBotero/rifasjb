@@ -23,7 +23,7 @@ const Blocks = () => {
 
   const fetchData = () => {
     setLoading(true);
-    fetch("https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle")
+    fetch("https://4nhq52k8-7123.use2.devtunnels.ms/Raffle")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -64,7 +64,7 @@ const Blocks = () => {
   const deleteItem = async (id) => {
     try {
       const response = await fetch(
-        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
+        `https://4nhq52k8-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
         {
           method: "DELETE",
           headers: {
@@ -111,7 +111,7 @@ const Blocks = () => {
   const handleUpdate = async () => {
     try {
       const response = await fetch(
-        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle`,
+        `https://4nhq52k8-7123.use2.devtunnels.ms/Raffle`,
         {
           method: "PUT",
           headers: {
@@ -141,7 +141,7 @@ const Blocks = () => {
   const handleAddNew = async () => {
     try {
       const response = await fetch(
-        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle`,
+        `https://4nhq52k8-7123.use2.devtunnels.ms/Raffle`,
         {
           method: "POST",
           headers: {
@@ -298,7 +298,7 @@ const Blocks = () => {
                         <img
                           src={`data:image/jpeg;base64,${imagesMap[item.id]}`}
                           alt={`Imagen ${item.name}`}
-                          className="object-cover w-full h-full rounded-lg"
+                          className="object-cover w-full h-full rounded-2xl"
                         />
                       </div>
                     ) : (
@@ -336,7 +336,9 @@ const Blocks = () => {
 
                   {userRole !== "admin" && (
                     <button
-                       className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] hover:shadow-lg hover:shadow-black rounded ml-auto transition-all"
+                       className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] 
+                       hover:scale-105
+                       hover:shadow-lg hover:shadow-black  rounded ml-auto transition-all"
                       onClick={() => handleBuy(item)}
                     >
                       COMPRAR

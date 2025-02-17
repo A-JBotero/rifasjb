@@ -19,11 +19,9 @@ const Blocks = () => {
     ticketPrice: 0,
     idLottery: 1,
   });
-  const navigate = useNavigate();
-
   const fetchData = () => {
     setLoading(true);
-    fetch("https://4nhq52k8-7123.use2.devtunnels.ms/Raffle")
+    fetch("https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -64,7 +62,7 @@ const Blocks = () => {
   const deleteItem = async (id) => {
     try {
       const response = await fetch(
-        `https://4nhq52k8-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
+        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
         {
           method: "DELETE",
           headers: {
@@ -111,7 +109,7 @@ const Blocks = () => {
   const handleUpdate = async () => {
     try {
       const response = await fetch(
-        `https://4nhq52k8-7123.use2.devtunnels.ms/Raffle`,
+        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle`,
         {
           method: "PUT",
           headers: {
@@ -141,7 +139,7 @@ const Blocks = () => {
   const handleAddNew = async () => {
     try {
       const response = await fetch(
-        `https://4nhq52k8-7123.use2.devtunnels.ms/Raffle`,
+        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle`,
         {
           method: "POST",
           headers: {

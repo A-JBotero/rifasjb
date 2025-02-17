@@ -1,35 +1,29 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import logoDsB from '../assets/logoDsB.png'; 
 
 const NavBar = ({ onAddCard, userRole, setUserRole }) => {
   const location = useLocation();
-  const navigate = useNavigate(); // Usamos useNavigate para la navegación programática
+  const navigate = useNavigate();
 
-  // Comprobar si estamos en la página /login
   const isLoginPage = location.pathname === '/login';
-
-  // Comprobar si estamos en la página /home
   const isHomePage = location.pathname === '/home';
 
-  // Función para manejar la navegación a la página de administración
   const handleAdminClick = () => {
-    navigate('/login'); // Navega a la página de login
+    navigate('/login');
   };
 
-  // Función para manejar el logout
   const handleLogout = () => {
-    setUserRole(null); 
-    navigate('/login'); // Redirige a la página de login
+    setUserRole(null);
+    navigate('/login');
   };
 
   return (
     <header className="text-gray-600 body-font bg-bgb">
       <div className="container mx-auto flex flex-wrap p-8 flex-col md:flex-row items-center">
-        <a
-          href="/home"
-          className="flex title-font font-medium items-center text-gray-900 mb-3 md:mb-0"
-        >
-          <span className="ml-12 pt-2 text-2xl text-white font-serif italic">DieselStyles</span>
+        <a href="/home" className="flex title-font font-medium items-center text-gray-900 mb-3 md:mb-0">
+          <img src={logoDsB} alt="DieselStyles Logo" className="w-10 h-10 mr-2" />
+          <span className="text-2xl text-white font-serif italic">DieselStyles</span>
         </a>
       
         {userRole === 'admin' && (      
@@ -40,20 +34,20 @@ const NavBar = ({ onAddCard, userRole, setUserRole }) => {
             Agregar Card
           </button>
         )}
-{isHomePage && !isLoginPage && userRole !== 'admin' && (
-  <button
-    onClick={handleAdminClick}
-    className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] hover:shadow-lg hover:shadow-black rounded ml-auto transition-all"
-  >
-    ADMINISTRAR
-  </button>
-)}
 
+        {isHomePage && !isLoginPage && userRole !== 'admin' && (
+          <button
+            onClick={handleAdminClick}
+            className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] hover:shadow-lg hover:shadow-black rounded ml-auto transition-all"
+          >
+            ADMINISTRAR
+          </button>
+        )}
 
         {userRole === 'admin' && (
           <button
             onClick={handleLogout}
-            className="inline-flex items-center text-white bg-red-500 border-0 py-2 px-5 focus:outline-none hover:bg-hovbtn  rounded ml-auto"
+            className="inline-flex items-center text-white bg-red-500 border-0 py-2 px-5 focus:outline-none hover:bg-hovbtn rounded ml-auto"
           >
             LogOut
           </button>

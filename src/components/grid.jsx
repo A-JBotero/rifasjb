@@ -11,16 +11,16 @@ const Grid = ({ item }) => {
   useEffect(() => {
     const fetchSoldNumbers = async () => {
       try {
-        console.log("🟢 Fetching vendidos para raffleId:", item.id);
+        console.log(" Fetching vendidos para raffleId:", item.id);
         const response = await fetch(`http://localhost:5026/Ticket/GetTicketsByRaffle/${item.id}`);
         const data = await response.json();
-        console.log("🟢 Tickets recibidos:", data);
+        console.log(" Tickets recibidos:", data);
 
         const vendidos = data.filter(ticket => ticket.state === 1).map(ticket => ticket.number);
-        console.log("🟢 Números vendidos:", vendidos);
+        console.log(" Números vendidos:", vendidos);
         setSoldNumbers(vendidos);
       } catch (error) {
-        console.error("❌ Error al cargar los números vendidos:", error);
+        console.error(" Error al cargar los números vendidos:", error);
       }
     };
 

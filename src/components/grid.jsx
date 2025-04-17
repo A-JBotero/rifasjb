@@ -16,7 +16,7 @@ const Grid = ({ item }) => {
         const data = await response.json();
         console.log(" Tickets recibidos:", data);
 
-        const vendidos = data.filter(ticket => ticket.state === 1).map(ticket => ticket.number);
+        const vendidos = data.filter(ticket => ticket.state === 2).map(ticket => ticket.number);
         console.log(" Números vendidos:", vendidos);
         setSoldNumbers(vendidos);
       } catch (error) {
@@ -45,7 +45,7 @@ const Grid = ({ item }) => {
             body: JSON.stringify({
               raffleId: item.id,
               number: number,
-              state: 1,
+              state: 2,
             }),
           });
 
@@ -61,7 +61,7 @@ const Grid = ({ item }) => {
       // Refrescar vendidos
       const res = await fetch(`http://localhost:5026/Ticket/GetTicketsByRaffle/${item.id}`);
       const data = await res.json();
-      const vendidos = data.filter(ticket => ticket.state === 1).map(ticket => ticket.number);
+      const vendidos = data.filter(ticket => ticket.state === 2).map(ticket => ticket.number);
       setSoldNumbers(vendidos);
     } catch (error) {
       console.error(" Error al reservar los números:", error);

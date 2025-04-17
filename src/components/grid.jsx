@@ -64,7 +64,7 @@ const Grid = ({ item }) => {
       const vendidos = data.filter(ticket => ticket.state === 1).map(ticket => ticket.number);
       setSoldNumbers(vendidos);
     } catch (error) {
-      console.error("❌ Error al reservar los números:", error);
+      console.error(" Error al reservar los números:", error);
       alert("Hubo un problema al reservar los números.");
     }
   };

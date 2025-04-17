@@ -10,18 +10,20 @@ const Blocks = () => {
   const [editItem, setEditItem] = useState(null);
   const [newItem, setNewItem] = useState(false);
   const [formData, setFormData] = useState({
+    id: "",
     name: "",
     description: "",
     file: "",
     startDate: "",
     endDate: "",
-    status: 1,
+    state: 1,
     ticketPrice: 0,
-    idLottery: 1,
+    idLottery: 0,
   });
+  const navigate = useNavigate();
   const fetchData = () => {
     setLoading(true);
-    fetch("https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle")
+    fetch("http://localhost:5026/Raffle")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -51,7 +53,7 @@ const Blocks = () => {
   }, []);
 
   const handleBuy = (item) => {
-    navigate("/sale", {
+    navigate(`/sale/${item.id}`, {
       state: {
         item: item,
         imagesMap: imagesMap,
@@ -62,7 +64,7 @@ const Blocks = () => {
   const deleteItem = async (id) => {
     try {
       const response = await fetch(
-        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle/?id=${id}`,
+        `http://localhost:5026/Raffle/?id=${id}`,
         {
           method: "DELETE",
           headers: {
@@ -109,7 +111,7 @@ const Blocks = () => {
   const handleUpdate = async () => {
     try {
       const response = await fetch(
-        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle`,
+        `http://localhost:5026/Raffle`,
         {
           method: "PUT",
           headers: {
@@ -139,7 +141,7 @@ const Blocks = () => {
   const handleAddNew = async () => {
     try {
       const response = await fetch(
-        `https://l8sb6dzk-7123.use2.devtunnels.ms/Raffle`,
+        `http://localhost:5026/Raffle/RegisterRaffle`,
         {
           method: "POST",
           headers: {
@@ -150,7 +152,7 @@ const Blocks = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Error al añadir el elemento.");
+        throw new Error("Error al añadir el elemento.");l
       }
 
       const newItem = await response.json();

@@ -1,18 +1,46 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import NavBar from '../components/navBar';
 import Items from '../components/items';
 import Footer from '../components/footer';
 
 const Sale = () => {
-  const location = useLocation(); // Obtener el estado de navegación
-  const item = location.state?.item; // Extraer el ítem pasado desde Blocks
+  const location = useLocation();
+  const { id } = useParams(); 
+  const [item, setItem] = useState(location.state?.item || null);
+  const [loading, setLoading] = useState(!location.state?.item);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!item) {
+      fetch(`http://localhost:5026/Raffle/${id}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('No se pudo cargar la información del producto.');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setItem(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(err.message);
+          setLoading(false);
+        });
+    }
+  }, [id, item]);
 
   return (
     <>
       <NavBar />
-      {item ? (
-        <Items item={item} /> // Pasar el ítem al componente Items
+      {loading ? (
+        <p className="text-center text-white mt-10">Cargando...</p>
+      ) : error ? (
+        <p className="text-center text-red-500 mt-10">{error}</p>
+      ) : item ? (
+        <Items item={item} />
       ) : (
         <p className="text-center text-white mt-10">
           No se encontró información del producto seleccionado.

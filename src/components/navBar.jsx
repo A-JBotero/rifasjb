@@ -22,7 +22,7 @@ const NavBar = ({ onAddCard, userRole, setUserRole }) => {
     <header className="text-gray-600 body-font bg-bgb">
       <div className="container mx-auto flex flex-wrap p-8 flex-col md:flex-row items-center">
         <a href="/home" className="flex title-font font-medium items-center text-gray-900 mb-3 md:mb-0">
-          <img src={logoDsB} alt="DieselStyles Logo" className="w-10 h-10 mr-2" />
+          <img src={logoDsB} alt="DieselStyles Logo" className="w-20 h-20 mr-2" />
           <span className="text-2xl text-white font-serif italic">DieselStyles</span>
         </a>
       

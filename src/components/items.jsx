@@ -2,10 +2,10 @@ import React from 'react';
 import Grid from './grid';
 
 const Items = ({ item, imagesMap }) => {
-  console.log("🟢 item:", item);
-  console.log("🟢 imagesMap:", imagesMap);
+  console.log(" item:", item);
+  console.log(" imagesMap:", imagesMap);
   const itemImage = imagesMap?.[item?.id];
-  console.log("🟢 itemImage:", itemImage);
+  console.log(" itemImage:", itemImage);
 
   if (!item) {
     return (

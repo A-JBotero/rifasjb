@@ -8,7 +8,9 @@ const Sale = () => {
   const location = useLocation();
   const { id } = useParams();
   const [item, setItem] = useState(location.state?.item || null);
-  const [imagesMap, setImagesMap] = useState(location.state?.imagesMap || {});
+  const [imagesMap, setImagesMap] = useState(
+    location.state?.imagesMap || { [item?.id]: item?.file } || {} // <-- Único cambio aquí
+  );
   const [loading, setLoading] = useState(!location.state?.item);
   const [error, setError] = useState(null);
 
@@ -23,7 +25,7 @@ const Sale = () => {
         })
         .then((data) => {
           setItem(data);
-          setImagesMap({ [data.id]: data.file }); // En caso de que se entre directamente por URL
+          setImagesMap(prev => ({ ...prev, [data.id]: data.file })); // Mantiene imágenes existentes
           setLoading(false);
         })
         .catch((err) => {

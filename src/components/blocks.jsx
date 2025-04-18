@@ -21,6 +21,7 @@ const Blocks = () => {
     idLottery: 0,
   });
   const navigate = useNavigate();
+
   const fetchData = () => {
     setLoading(true);
     fetch("http://localhost:5026/Raffle")
@@ -52,11 +53,12 @@ const Blocks = () => {
     fetchData();
   }, []);
 
+  // Único cambio: Asegurar que imagesMap se pasa al navegar a /sale
   const handleBuy = (item) => {
     navigate(`/sale/${item.id}`, {
       state: {
         item: item,
-        imagesMap: imagesMap,
+        imagesMap: imagesMap, // <-- Cambio aquí
       },
     });
   };
@@ -78,7 +80,6 @@ const Blocks = () => {
       }
 
       alert("Elemento eliminado exitosamente.");
-
       setData((prevData) => prevData.filter((item) => item.id !== id));
       setImagesMap((prevImagesMap) => {
         const updatedImagesMap = { ...prevImagesMap };
@@ -126,11 +127,9 @@ const Blocks = () => {
       }
 
       alert("Elemento actualizado exitosamente.");
-
       setData((prevData) =>
         prevData.map((item) => (item.id === formData.id ? formData : item))
       );
-
       setEditItem(null);
     } catch (error) {
       console.error("Error al realizar la petición PUT:", error);
@@ -157,13 +156,11 @@ const Blocks = () => {
 
       const newItem = await response.json();
       alert("Elemento añadido exitosamente.");
-
       setData((prevData) => [...prevData, newItem]);
       setImagesMap((prevImagesMap) => ({
         ...prevImagesMap,
         [newItem.id]: newItem.file,
       }));
-
       setNewItem(false);
     } catch (error) {
       console.error("Error al realizar la petición POST:", error);

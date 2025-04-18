@@ -2,10 +2,8 @@ import React from 'react';
 import Grid from './grid';
 
 const Items = ({ item, imagesMap }) => {
-  console.log(" item:", item);
-  console.log(" imagesMap:", imagesMap);
-  const itemImage = item?.image || item?.imageBase64 || null;
-  console.log(" itemImage:", itemImage);
+  // Único cambio: Orden de prioridad para obtener la imagen
+  const itemImage = imagesMap[item?.id] || item?.file || item?.image || item?.imageBase64 || null;
 
   if (!item) {
     return (
@@ -41,8 +39,6 @@ const Items = ({ item, imagesMap }) => {
           <p className="leading-relaxed text-white text-sm md:text-base">
             Fecha: {item.startDate || 'No disponible'}
           </p>
-
-          
         </div>
       </div>
 

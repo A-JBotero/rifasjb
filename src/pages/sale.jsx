@@ -6,8 +6,9 @@ import Footer from '../components/footer';
 
 const Sale = () => {
   const location = useLocation();
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [item, setItem] = useState(location.state?.item || null);
+  const [imagesMap, setImagesMap] = useState(location.state?.imagesMap || {});
   const [loading, setLoading] = useState(!location.state?.item);
   const [error, setError] = useState(null);
 
@@ -22,6 +23,7 @@ const Sale = () => {
         })
         .then((data) => {
           setItem(data);
+          setImagesMap({ [data.id]: data.file }); // En caso de que se entre directamente por URL
           setLoading(false);
         })
         .catch((err) => {
@@ -40,7 +42,7 @@ const Sale = () => {
       ) : error ? (
         <p className="text-center text-red-500 mt-10">{error}</p>
       ) : item ? (
-        <Items item={item} />
+        <Items item={item} imagesMap={imagesMap} />
       ) : (
         <p className="text-center text-white mt-10">
           No se encontró información del producto seleccionado.

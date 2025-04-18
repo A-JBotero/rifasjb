@@ -4,36 +4,30 @@ const Grid = ({ item }) => {
   const [selectedNumbers, setSelectedNumbers] = useState([]);
   const [soldNumbers, setSoldNumbers] = useState([]);
 
-  if (!item || !item.id) {
-    return <div style={{ color: "white" }}>Cargando información de la rifa...</div>;
-  }
-
   useEffect(() => {
     const fetchSoldNumbers = async () => {
       try {
-        console.log("Fetching vendidos para raffleId:", item.id);
         const response = await fetch(`http://localhost:5026/Ticket/GetTicketsByRaffle/${item.id}`);
         const data = await response.json();
-        console.log("Tickets recibidos:", data);
-
         const vendidos = data
           .filter(ticket => ticket.state === 2)
-          .map(ticket => ticket.number.toString().padStart(2, '0')); // aseguramos formato "00"
-        console.log("Números vendidos:", vendidos);
+          .map(ticket => ticket.number.toString().padStart(2, '0'));
         setSoldNumbers(vendidos);
       } catch (error) {
         console.error("Error al cargar los números vendidos:", error);
       }
     };
 
-    fetchSoldNumbers();
-  }, [item.id]);
+    if (item?.id) fetchSoldNumbers();
+  }, [item?.id]);
 
   const handleClick = (number) => {
     if (soldNumbers.includes(number)) return;
 
-    setSelectedNumbers(prev =>
-      prev.includes(number) ? prev.filter(n => n !== number) : [...prev, number]
+    setSelectedNumbers((prev) =>
+      prev.includes(number)
+        ? prev.filter((n) => n !== number)
+        : [...prev, number]
     );
   };
 
@@ -46,7 +40,7 @@ const Grid = ({ item }) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               raffleId: item.id,
-              number: parseInt(number, 10), // enviar como número al backend
+              number: parseInt(number, 10),
               state: 2,
             }),
           });
@@ -60,7 +54,6 @@ const Grid = ({ item }) => {
       alert("Números reservados con éxito");
       setSelectedNumbers([]);
 
-      // Refrescar vendidos
       const res = await fetch(`http://localhost:5026/Ticket/GetTicketsByRaffle/${item.id}`);
       const data = await res.json();
       const vendidos = data
@@ -75,36 +68,33 @@ const Grid = ({ item }) => {
 
   const getButtonStyle = (number) => {
     if (soldNumbers.includes(number)) {
-      return { backgroundColor: "red", color: "white", cursor: "not-allowed" };
+      return "bg-red-400 text-black cursor-not-allowed";
     }
     if (selectedNumbers.includes(number)) {
-      return { backgroundColor: "orange", color: "white" };
+      return "bg-yellow-300 text-black";
     }
-    return {};
+    return "bg-white text-black hover:bg-gray-200";
   };
 
+  if (!item || !item.id) {
+    return <div className="text-white">Cargando información de la rifa...</div>;
+  }
+
   return (
-    <div style={{ color: "white", textAlign: "center" }}>
-      <h2>Selecciona tus números</h2>
+    <div className="text-white px-4 py-2 flex flex-col items-center">
+      <div className="mb-2 text-center">
+        <h2 className="text-lg font-bold">Selecciona tus números</h2>
+      </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(10, 40px)",
-          gap: "5px",
-          justifyContent: "center",
-        }}
+        className="grid gap-2 justify-center"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(48px, 1fr))", maxWidth: "400px" }}
       >
         {Array.from({ length: 100 }, (_, i) => i.toString().padStart(2, '0')).map((number) => (
           <button
             key={number}
             onClick={() => handleClick(number)}
             disabled={soldNumbers.includes(number)}
-            style={{
-              padding: "10px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              ...getButtonStyle(number),
-            }}
+            className={`w-12 h-12 rounded font-bold ${getButtonStyle(number)}`}
           >
             {number}
           </button>
@@ -112,17 +102,16 @@ const Grid = ({ item }) => {
       </div>
       <button
         onClick={handlePay}
-        style={{
-          marginTop: "20px",
-          padding: "10px 20px",
-          backgroundColor: "#f1c40f",
-          border: "none",
-          borderRadius: "5px",
-        }}
+        disabled={selectedNumbers.length === 0}
+        className={`mt-4 px-4 py-2 rounded font-semibold ${
+          selectedNumbers.length === 0
+            ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+            : "bg-green-400 text-black hover:bg-green-500"
+        }`}
       >
         Pagar
       </button>
-      <p style={{ marginTop: "10px" }}>
+      <p className="mt-2 text-center">
         Total: {selectedNumbers.length} x ${item.ticketPrice || 0} ={" "}
         <strong>{selectedNumbers.length * (item.ticketPrice || 0)}$</strong>
       </p>

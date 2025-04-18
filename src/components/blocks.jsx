@@ -152,7 +152,7 @@ const Blocks = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Error al añadir el elemento.");l
+        throw new Error("Error al añadir el elemento.");
       }
 
       const newItem = await response.json();

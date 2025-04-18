@@ -4,7 +4,7 @@ import Grid from './grid';
 const Items = ({ item, imagesMap }) => {
   console.log(" item:", item);
   console.log(" imagesMap:", imagesMap);
-  const itemImage = imagesMap?.[item?.id];
+  const itemImage = item?.image || item?.imageBase64 || null;
   console.log(" itemImage:", itemImage);
 
   if (!item) {
@@ -42,12 +42,7 @@ const Items = ({ item, imagesMap }) => {
             Fecha: {item.startDate || 'No disponible'}
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between mt-6 w-full">
-            <span className="title-font font-medium text-xl md:text-2xl text-white">Total:</span>
-            <span className="title-font font-medium text-xl md:text-2xl text-white">
-              {item.value || '0.00'}$
-            </span>
-          </div>
+          
         </div>
       </div>
 

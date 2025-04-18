@@ -11,16 +11,18 @@ const Grid = ({ item }) => {
   useEffect(() => {
     const fetchSoldNumbers = async () => {
       try {
-        console.log(" Fetching vendidos para raffleId:", item.id);
+        console.log("Fetching vendidos para raffleId:", item.id);
         const response = await fetch(`http://localhost:5026/Ticket/GetTicketsByRaffle/${item.id}`);
         const data = await response.json();
-        console.log(" Tickets recibidos:", data);
+        console.log("Tickets recibidos:", data);
 
-        const vendidos = data.filter(ticket => ticket.state === 2).map(ticket => ticket.number);
-        console.log(" Números vendidos:", vendidos);
+        const vendidos = data
+          .filter(ticket => ticket.state === 2)
+          .map(ticket => ticket.number.toString().padStart(2, '0')); // aseguramos formato "00"
+        console.log("Números vendidos:", vendidos);
         setSoldNumbers(vendidos);
       } catch (error) {
-        console.error(" Error al cargar los números vendidos:", error);
+        console.error("Error al cargar los números vendidos:", error);
       }
     };
 
@@ -44,7 +46,7 @@ const Grid = ({ item }) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               raffleId: item.id,
-              number: number,
+              number: parseInt(number, 10), // enviar como número al backend
               state: 2,
             }),
           });
@@ -61,10 +63,12 @@ const Grid = ({ item }) => {
       // Refrescar vendidos
       const res = await fetch(`http://localhost:5026/Ticket/GetTicketsByRaffle/${item.id}`);
       const data = await res.json();
-      const vendidos = data.filter(ticket => ticket.state === 2).map(ticket => ticket.number);
+      const vendidos = data
+        .filter(ticket => ticket.state === 2)
+        .map(ticket => ticket.number.toString().padStart(2, '0'));
       setSoldNumbers(vendidos);
     } catch (error) {
-      console.error(" Error al reservar los números:", error);
+      console.error("Error al reservar los números:", error);
       alert("Hubo un problema al reservar los números.");
     }
   };
@@ -82,8 +86,15 @@ const Grid = ({ item }) => {
   return (
     <div style={{ color: "white", textAlign: "center" }}>
       <h2>Selecciona tus números</h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(10, 40px)", gap: "5px", justifyContent: "center" }}>
-        {Array.from({ length: 100 }, (_, i) => i + 1).map((number) => (
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(10, 40px)",
+          gap: "5px",
+          justifyContent: "center",
+        }}
+      >
+        {Array.from({ length: 100 }, (_, i) => i.toString().padStart(2, '0')).map((number) => (
           <button
             key={number}
             onClick={() => handleClick(number)}
@@ -99,11 +110,21 @@ const Grid = ({ item }) => {
           </button>
         ))}
       </div>
-      <button onClick={handlePay} style={{ marginTop: "20px", padding: "10px 20px", backgroundColor: "#f1c40f", border: "none", borderRadius: "5px" }}>
+      <button
+        onClick={handlePay}
+        style={{
+          marginTop: "20px",
+          padding: "10px 20px",
+          backgroundColor: "#f1c40f",
+          border: "none",
+          borderRadius: "5px",
+        }}
+      >
         Pagar
       </button>
       <p style={{ marginTop: "10px" }}>
-        Total: {selectedNumbers.length} x ${item.ticketPrice || 0} = <strong>{selectedNumbers.length * (item.ticketPrice || 0)}$</strong>
+        Total: {selectedNumbers.length} x ${item.ticketPrice || 0} ={" "}
+        <strong>{selectedNumbers.length * (item.ticketPrice || 0)}$</strong>
       </p>
     </div>
   );

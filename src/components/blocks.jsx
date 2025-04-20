@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ENDPOINTS } from "../config";
 
 const Blocks = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState("guest");
@@ -21,73 +21,82 @@ const Blocks = () => {
     ticketPrice: 0,
     idLottery: 0,
   });
+
   const navigate = useNavigate();
 
-  const fetchData = () => {
-    setLoading(true);
-    fetch(ENDPOINTS.RAFFLE.GET_ALL)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(ENDPOINTS.RAFFLE.GET_ALL);
+      if (!response.ok) {
+        const text = await response.text();
+        console.error("Error en fetchData:", response.status, text);
+        throw new Error(`Network response was not ok: ${response.status}`);
+      }
+
+      const text = await response.text();
+      if (text) {
+        try {
+          const result = JSON.parse(text);
+          if (!Array.isArray(result)) {
+            console.warn("Los datos recibidos no son un array:", result);
+            setData([]);
+            setImagesMap({});
+          } else {
+            setData(result);
+            const newImagesMap = {};
+            result.forEach((item) => {
+              newImagesMap[item.id] = item.file;
+            });
+            setImagesMap(newImagesMap);
+          }
+        } catch (e) {
+          console.warn("Error al parsear la respuesta JSON:", e);
+          setData([]);
+          setImagesMap({});
         }
-        return response.json();
-      })
-      .then((data) => {
-        setData(data);
-        const newImagesMap = {};
-        data.forEach((item) => {
-          newImagesMap[item.id] = item.file;
-        });
-        setImagesMap((prevImagesMap) => ({
-          ...prevImagesMap,
-          ...newImagesMap,
-        }));
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
+      } else {
+        console.warn("La respuesta del servidor está vacía.");
+        setData([]);
+        setImagesMap({});
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.error("Error en fetchData:", err);
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Único cambio: Asegurar que imagesMap se pasa al navegar a /sale
   const handleBuy = (item) => {
     navigate(`/sale/${item.id}`, {
       state: {
         item: item,
-        imagesMap: imagesMap, // <-- Cambio aquí
+        imagesMap: imagesMap,
       },
     });
   };
 
   const deleteItem = async (id) => {
     try {
-      const response = await fetch(ENDPOINTS.RAFFLE.DELETE(id),
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(ENDPOINTS.RAFFLE.DELETE(id), {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (!response.ok) {
-        throw new Error("Error al eliminar el elemento.");
-      }
+      if (!response.ok) throw new Error("Error al eliminar el elemento.");
 
       alert("Elemento eliminado exitosamente.");
-      setData((prevData) => prevData.filter((item) => item.id !== id));
-      setImagesMap((prevImagesMap) => {
-        const updatedImagesMap = { ...prevImagesMap };
-        delete updatedImagesMap[id];
-        return updatedImagesMap;
-      });
+      fetchData();
     } catch (error) {
-      console.error("Error al realizar la petición DELETE:", error);
+      console.error("Error al eliminar:", error);
       alert("No se pudo eliminar el elemento.");
     }
   };
@@ -111,57 +120,96 @@ const Blocks = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await fetch(ENDPOINTS.RAFFLE.UPDATE,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
+      console.log("Datos a enviar para actualizar:", formData); 
+      const response = await fetch(ENDPOINTS.RAFFLE.UPDATE, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          raffle: {
+            id: Number(formData.id) || 0,
+            name: formData.name,
+            description: formData.description,
+            file: formData.file,
+            startDate: formData.startDate,
+            endDate: formData.endDate,
+            status: Number(formData.state), 
+            ticketPrice: Number(formData.ticketPrice),
+            idLottery: Number(formData.idLottery),
           },
-          body: JSON.stringify(formData),
-        }
-      );
+        }),
+      });
 
       if (!response.ok) {
+        const text = await response.text();
+        console.error("Error al actualizar elemento:", response.status, text);
         throw new Error("Error al actualizar el elemento.");
       }
 
       alert("Elemento actualizado exitosamente.");
-      setData((prevData) =>
-        prevData.map((item) => (item.id === formData.id ? formData : item))
-      );
+      fetchData();
       setEditItem(null);
+      setFormData({
+        id: "",
+        name: "",
+        description: "",
+        file: "",
+        ticketPrice: 0,
+        startDate: "",
+        endDate: "",
+        state: 1,
+        idLottery: 0,
+      });
     } catch (error) {
-      console.error("Error al realizar la petición PUT:", error);
+      console.error("Error al actualizar:", error);
       alert("No se pudo actualizar el elemento.");
     }
   };
 
   const handleAddNew = async () => {
     try {
-      const response = await fetch(ENDPOINTS.RAFFLE.REGISTER,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(ENDPOINTS.RAFFLE.REGISTER, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: Number(formData.id) || 0,
+          name: formData.name,
+          description: formData.description,
+          file: formData.file,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          status: Number(formData.state),
+          ticketPrice: Number(formData.ticketPrice),
+          idLottery: Number(formData.idLottery),
+        }),
+      });
 
       if (!response.ok) {
+        const text = await response.text();
+        console.error("Error al añadir elemento:", response.status, text);
         throw new Error("Error al añadir el elemento.");
       }
 
-      const newItem = await response.json();
       alert("Elemento añadido exitosamente.");
-      setData((prevData) => [...prevData, newItem]);
-      setImagesMap((prevImagesMap) => ({
-        ...prevImagesMap,
-        [newItem.id]: newItem.file,
-      }));
+      await fetchData();
       setNewItem(false);
+      setEditItem(null);
+      setFormData({
+        id: "",
+        name: "",
+        description: "",
+        file: "",
+        ticketPrice: 0,
+        startDate: "",
+        endDate: "",
+        state: 1,
+        idLottery: 0,
+      });
     } catch (error) {
-      console.error("Error al realizar la petición POST:", error);
+      console.error("Error al añadir:", error);
       alert("No se pudo añadir el elemento.");
     }
   };
@@ -186,13 +234,14 @@ const Blocks = () => {
                 onClick={() => {
                   setNewItem(true);
                   setFormData({
+                    id: "",
                     name: "",
                     description: "",
                     file: "",
                     ticketPrice: 0,
-                    startDate: "",
+                    startDate: new Date().toISOString().split("T")[0],
                     endDate: "",
-                    status: 1,
+                    state: 1,
                     idLottery: 0,
                   });
                 }}
@@ -261,33 +310,35 @@ const Blocks = () => {
                   placeholder="ID de la Lotería"
                   className="w-full p-2 rounded"
                 />
-                <button
-                  className="text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
-                  onClick={editItem ? handleUpdate : handleAddNew}
-                >
-                  {editItem ? "Actualizar" : "Añadir"}
-                </button>
-                <button
-                  className="text-white bg-gray-500 border-0 py-2 px-5 focus:outline-none hover:bg-gray-600 rounded"
-                  onClick={() => {
-                    setEditItem(null);
-                    setNewItem(false);
-                  }}
-                >
-                  Cancelar
-                </button>
+                <div className="flex gap-4">
+                  <button
+                    className="text-white bg-blue-500 border-0 py-2 px-5 focus:outline-none hover:bg-blue-600 rounded"
+                    onClick={editItem ? handleUpdate : handleAddNew}
+                  >
+                    {editItem ? "Actualizar" : "Añadir"}
+                  </button>
+                  <button
+                    className="text-white bg-gray-500 border-0 py-2 px-5 focus:outline-none hover:bg-gray-600 rounded"
+                    onClick={() => {
+                      setEditItem(null);
+                      setNewItem(false);
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
               </div>
             </div>
           )}
 
           <div className="flex flex-wrap gap-6 text-center justify-center">
-            {Array.isArray(data) &&
+            {Array.isArray(data) && data.length > 0 ? (
               data.map((item, index) => (
                 <div
                   key={item.id || `item-${index}`}
                   className="sm:w-2/5 bg-lightgray border-2 border-gray-900 rounded-lg pt-4 pb-3 px-5 transform transition duration-300 hover:scale-105 hover:border-black hover:shadow-lg"
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                     {imagesMap[item.id] ? (
                       <div className="flex justify-center items-center w-full h-64 bg-gray-200">
                         <img
@@ -310,18 +361,12 @@ const Blocks = () => {
                   </p>
 
                   <p className="leading-relaxed text-white">
-                    Fecha:{" "}
-                    {item.endDate
-                      ? (() => {
-                        const parsedDate = new Date(item.endDate);
-                        return !isNaN(parsedDate)
-                          ? parsedDate.toLocaleDateString("es-ES", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })
-                          : "Fecha no válida";
-                      })()
+                    Fecha: {item.endDate
+                      ? new Date(item.endDate).toLocaleDateString("es-ES", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
                       : "Fecha no disponible"}
                   </p>
 
@@ -331,9 +376,7 @@ const Blocks = () => {
 
                   {userRole !== "admin" && (
                     <button
-                      className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] 
-                       hover:scale-105
-                       hover:shadow-lg hover:shadow-black  rounded ml-auto transition-all"
+                      className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] hover:scale-105 hover:shadow-lg hover:shadow-black rounded ml-auto transition-all"
                       onClick={() => handleBuy(item)}
                     >
                       COMPRAR
@@ -357,7 +400,10 @@ const Blocks = () => {
                     </div>
                   )}
                 </div>
-              ))}
+              ))
+            ) : (
+              <p className="text-white text-lg">No hay rifas disponibles</p>
+            )}
           </div>
         </div>
       </section>

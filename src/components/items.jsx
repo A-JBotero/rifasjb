@@ -2,7 +2,6 @@ import React from 'react';
 import Grid from './grid';
 
 const Items = ({ item, imagesMap }) => {
-  // Único cambio: Orden de prioridad para obtener la imagen
   const itemImage = imagesMap[item?.id] || item?.file || item?.image || item?.imageBase64 || null;
 
   if (!item) {

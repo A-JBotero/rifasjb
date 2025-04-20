@@ -9,7 +9,7 @@ const Sale = () => {
   const { id } = useParams();
   const [item, setItem] = useState(location.state?.item || null);
   const [imagesMap, setImagesMap] = useState(
-    location.state?.imagesMap || { [item?.id]: item?.file } || {} // <-- Único cambio aquí
+    location.state?.imagesMap || { [item?.id]: item?.file } || {} 
   );
   const [loading, setLoading] = useState(!location.state?.item);
   const [error, setError] = useState(null);
@@ -25,7 +25,7 @@ const Sale = () => {
         })
         .then((data) => {
           setItem(data);
-          setImagesMap(prev => ({ ...prev, [data.id]: data.file })); // Mantiene imágenes existentes
+          setImagesMap(prev => ({ ...prev, [data.id]: data.file }));
           setLoading(false);
         })
         .catch((err) => {

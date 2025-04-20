@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ENDPOINTS } from "../config";
 
 const Blocks = () => {
   const [data, setData] = useState(null);
@@ -24,7 +25,7 @@ const Blocks = () => {
 
   const fetchData = () => {
     setLoading(true);
-    fetch("http://localhost:5026/Raffle")
+    fetch(ENDPOINTS.RAFFLE.GET_ALL)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -65,8 +66,7 @@ const Blocks = () => {
 
   const deleteItem = async (id) => {
     try {
-      const response = await fetch(
-        `http://localhost:5026/Raffle/?id=${id}`,
+      const response = await fetch(ENDPOINTS.RAFFLE.DELETE(id),
         {
           method: "DELETE",
           headers: {
@@ -111,8 +111,7 @@ const Blocks = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5026/Raffle`,
+      const response = await fetch(ENDPOINTS.RAFFLE.UPDATE,
         {
           method: "PUT",
           headers: {
@@ -139,8 +138,7 @@ const Blocks = () => {
 
   const handleAddNew = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5026/Raffle/RegisterRaffle`,
+      const response = await fetch(ENDPOINTS.RAFFLE.REGISTER,
         {
           method: "POST",
           headers: {
@@ -315,25 +313,25 @@ const Blocks = () => {
                     Fecha:{" "}
                     {item.endDate
                       ? (() => {
-                          const parsedDate = new Date(item.endDate);
-                          return !isNaN(parsedDate)
-                            ? parsedDate.toLocaleDateString("es-ES", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })
-                            : "Fecha no válida";
-                        })()
+                        const parsedDate = new Date(item.endDate);
+                        return !isNaN(parsedDate)
+                          ? parsedDate.toLocaleDateString("es-ES", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                          : "Fecha no válida";
+                      })()
                       : "Fecha no disponible"}
                   </p>
-                 
+
                   <p className="leading-relaxed text-white">
                     Lotería: {item.idLottery}
                   </p>
 
                   {userRole !== "admin" && (
                     <button
-                       className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] 
+                      className="inline-flex items-center text-black bg-gold border border-black py-2 px-5 focus:outline-none hover:bg-[#E6C200] 
                        hover:scale-105
                        hover:shadow-lg hover:shadow-black  rounded ml-auto transition-all"
                       onClick={() => handleBuy(item)}

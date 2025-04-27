@@ -118,35 +118,35 @@ const Blocks = () => {
     }));
   };
 
+ 
   const handleUpdate = async () => {
     try {
-      console.log("Datos a enviar para actualizar:", formData); 
+      console.log("Datos a enviar para actualizar:", formData);
+  
       const response = await fetch(ENDPOINTS.RAFFLE.UPDATE, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          raffle: {
-            id: Number(formData.id) || 0,
-            name: formData.name,
-            description: formData.description,
-            file: formData.file,
-            startDate: formData.startDate,
-            endDate: formData.endDate,
-            status: Number(formData.state), 
-            ticketPrice: Number(formData.ticketPrice),
-            idLottery: Number(formData.idLottery),
-          },
+          id: Number(formData.id) || 0,
+          name: formData.name,
+          description: formData.description,
+          file: formData.file,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          status: Number(formData.state),
+          ticketPrice: Number(formData.ticketPrice),
+          idLottery: Number(formData.idLottery),
         }),
       });
-
+  
       if (!response.ok) {
         const text = await response.text();
         console.error("Error al actualizar elemento:", response.status, text);
         throw new Error("Error al actualizar el elemento.");
       }
-
+  
       alert("Elemento actualizado exitosamente.");
       fetchData();
       setEditItem(null);
@@ -181,7 +181,7 @@ const Blocks = () => {
           file: formData.file,
           startDate: formData.startDate,
           endDate: formData.endDate,
-          status: Number(formData.state),
+          state: Number(formData.state),
           ticketPrice: Number(formData.ticketPrice),
           idLottery: Number(formData.idLottery),
         }),

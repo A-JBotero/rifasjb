@@ -19,13 +19,13 @@ const Grid = ({ item }) => {
       try {
         const response = await fetch(ENDPOINTS.TICKET.GET_TICKETS_BY_RAFFLE(item.id));
         const data = await response.json();
-        const pedientes = data
+        const pendientes = data
           .filter(ticket => ticket.state === 2)
           .map(ticket => ticket.number.toString().padStart(2, '0'));
         const vendidos = data
           .filter(ticket => ticket.state === 3)
           .map(ticket => ticket.number.toString().padStart(2, '0'));
-        setPendingNumbers(pedientes);
+        setPendingNumbers(pendientes);
         setSoldNumbers(vendidos);
       } catch (error) {
         console.error("Error al cargar números:", error);
@@ -37,7 +37,6 @@ const Grid = ({ item }) => {
 
   const handleClick = (number) => {
     if (soldNumbers.includes(number) || pendingNumbers.includes(number)) return;
-
     setSelectedNumbers((prev) =>
       prev.includes(number)
         ? prev.filter((n) => n !== number)
@@ -73,14 +72,14 @@ const Grid = ({ item }) => {
 
       if (!response.ok) throw new Error("Error al procesar el pago");
 
-      alert("Pago realizado con éxito");
+      alert("Pago exitoso!");
       setSelectedNumbers([]);
       setFormData({ name: "", phone: "", city: "" });
       setShowConfirmationModal(false);
       window.location.reload();
     } catch (error) {
       console.error("Error:", error);
-      alert("Hubo un problema al procesar el pago.");
+      alert(`Hubo un problema: ${error.message}`);
     }
   };
 
@@ -110,6 +109,7 @@ const Grid = ({ item }) => {
 
   return (
     <div className="text-white px-4 py-2 flex flex-col items-center">
+      {/* Sección de números */}
       <div className="mb-2 text-center">
         <h2 className="text-lg font-bold">Selecciona tus números</h2>
       </div>
@@ -130,6 +130,7 @@ const Grid = ({ item }) => {
         ))}
       </div>
 
+      {/* Total a pagar */}
       <div className="mt-4 p-3 bg-yellow-100 rounded-lg text-center">
         <p className="text-2xl font-bold text-yellow-800">
           TOTAL: ${selectedNumbers.length * (item.ticketPrice || 0)}
@@ -139,17 +140,18 @@ const Grid = ({ item }) => {
         </p>
       </div>
 
+      {/* Botón de pagar */}
       <button
-  onClick={handlePayButtonClick}
-  disabled={selectedNumbers.length === 0}
-  className={`mt-4 px-6 py-3 rounded-lg font-bold text-lg transition-all
-    ${selectedNumbers.length === 0
-      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-      : "bg-yellow-300 text-black hover:bg-yellow-400 hover:shadow-lg"
-    }`}
->
-  PAGAR AHORA
-</button>
+        onClick={handlePayButtonClick}
+        disabled={selectedNumbers.length === 0}
+        className={`mt-4 px-6 py-3 rounded-lg font-bold text-lg transition-all
+          ${selectedNumbers.length === 0
+            ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+            : "bg-yellow-300 text-black hover:bg-yellow-400 hover:shadow-lg"
+          }`}
+      >
+        PAGAR AHORA
+      </button>
 
       {/* Modal de formulario */}
       {showModal && (

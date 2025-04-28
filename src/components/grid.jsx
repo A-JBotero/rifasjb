@@ -8,8 +8,9 @@ const Grid = ({ item }) => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
+    fullName: "",
+    phoneNumber: "",
+    email: "",
     city: ""
   });
   const [paymentData, setPaymentData] = useState(null);
@@ -53,8 +54,9 @@ const Grid = ({ item }) => {
     setPaymentData({
       raffleId: item.id,
       numbers: selectedNumbers.map(Number),
-      customerName: formData.name,
-      customerPhone: formData.phone,
+      fullName: formData.fullName,
+      phoneNumber: formData.phoneNumber,
+      email: formData.email,
       customerCity: formData.city,
       total: selectedNumbers.length * (item.ticketPrice || 0)
     });
@@ -64,7 +66,7 @@ const Grid = ({ item }) => {
 
   const handleConfirmPayment = async () => {
     try {
-      const response = await fetch(ENDPOINTS.TICKET.BUY_TICKET, {
+      const response = await fetch(ENDPOINTS.APPLICATION_PROCESSING.BUY_TICKET, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(paymentData),
@@ -74,7 +76,7 @@ const Grid = ({ item }) => {
 
       alert("Pago exitoso!");
       setSelectedNumbers([]);
-      setFormData({ name: "", phone: "", city: "" });
+      setFormData({ fullName: "", phoneNumber: "", email: "", city: "" });
       setShowConfirmationModal(false);
       window.location.reload();
     } catch (error) {
@@ -113,7 +115,7 @@ const Grid = ({ item }) => {
       <div className="mb-2 text-center">
         <h2 className="text-lg font-bold">Selecciona tus números</h2>
       </div>
-      
+
       <div
         className="grid gap-2 justify-center"
         style={{ gridTemplateColumns: "repeat(auto-fit, minmax(48px, 1fr))", maxWidth: "400px" }}
@@ -165,28 +167,42 @@ const Grid = ({ item }) => {
                 </label>
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="fullName"
+                  value={formData.fullName}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded text-black"
                   required
                 />
               </div>
-              
+
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Teléfono
                 </label>
                 <input
                   type="tel"
-                  name="phone"
-                  value={formData.phone}
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded text-black"
                   required
                 />
               </div>
-              
+
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded text-black"
+                  required
+                />
+              </div>
+
               <div className="mb-6">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Ciudad
@@ -226,10 +242,11 @@ const Grid = ({ item }) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 className="text-lg font-bold text-black mb-4">Confirmar Compra</h3>
-            
+
             <div className="text-black mb-4">
-              <p><strong>Nombre:</strong> {paymentData?.customerName}</p>
-              <p><strong>Teléfono:</strong> {paymentData?.customerPhone}</p>
+              <p><strong>Nombre:</strong> {paymentData?.fullName}</p>
+              <p><strong>Teléfono:</strong> {paymentData?.phoneNumber}</p>
+              <p><strong>Email:</strong> {paymentData?.email}</p>
               <p><strong>Ciudad:</strong> {paymentData?.customerCity}</p>
               <p className="mt-2">
                 <strong>Números:</strong> {paymentData?.numbers.join(', ')}

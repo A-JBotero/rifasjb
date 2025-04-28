@@ -169,7 +169,7 @@ const Blocks = () => {
 
   const handleAddNew = async () => {
     try {
-      const response = await fetch(ENDPOINTS.RAFFLE.REGISTER, {
+      const response = await fetch(ENDPOINTS.APPLICATION_PROCESSING.REGISTER_RAFFLE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
